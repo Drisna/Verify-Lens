@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerifyLens - AI Deepfake Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="{{ url_for('home') }}" class="logo">VerifyLens</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-text">
+                    <h1>Detect Deepfakes with Advanced AI Technology</h1>
+                    <p>Protect yourself from digital deception. Our AI technology analyzes videos with high accuracy to identify manipulated content.</p>
+                    <div class="button-container">
+                        <a href="{{ url_for('upload_form') }}" class="btn" aria-label="Start deepfake detection">Get Started</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="{{ url_for('static', filename='Designer.png') }}" alt="AI Technology Visualization">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 VerifyLens. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

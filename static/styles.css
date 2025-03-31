@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: white;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 50;
+    padding: 16px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 24px;
+    color: #2563EB;
+    text-decoration: none;
+}
+
+/* Hero Section */
+.hero {
+    padding: 150px 20px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* Text Content */
+.hero-text h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #1F2937;
+    margin-bottom: 16px;
+}
+
+.hero-text p {
+    font-size: 1.25rem;
+    color: #4B5563;
+    margin-bottom: 24px;
+}
+
+.button-container {
+    display: flex;
+    gap: 16px;
+}
+
+.btn {
+    background-color: #2563EB;
+    color: white;
+    padding: 12px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #1E40AF;
+}
+
+/* Hero Image (Now Rectangular) */
+.hero-image {
+    position: relative;
+    width: 400%;
+    max-width: 570px;
+    height: 500px; /* Rectangular Shape */
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.hero-image img:hover {
+    transform: scale(1.05);
+}
