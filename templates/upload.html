@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Video - VerifyLens</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='upload.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Let's Analyze The Video</h2>
+
+        <button id="browse-btn">Upload Video</button>
+        <input type="file" id="file-input" class="hidden" accept="video/*">
+        <p>Supported formats: MP4, MOV, AVI, MKV, WebM (max 500MB)</p>
+
+        <div id="error-message" class="hidden"></div>
+
+        <div id="video-preview-container" class="hidden">
+            <h3>Uploaded Video:</h3>
+            <video id="video-preview" controls class="hidden"></video>
+        </div>
+
+        <div id="upload-progress" class="hidden">
+            <p>Analyzing... <span id="progress-percentage">0%</span></p>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+
+        <div id="result-container" class="hidden">
+            <h3>Analysis Result:</h3>
+            <p id="result-text"></p>
+            <p id="confidence-score"></p>
+        </div>
+
+        <button id="refresh-btn" class="hidden">Refresh</button>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressBar = document.querySelector('.progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const videoPreviewContainer = document.getElementById('video-preview-container');
+        const videoPreview = document.getElementById('video-preview');
+        const errorMessage = document.getElementById('error-message');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const resultContainer = document.getElementById('result-container');
+        const resultText = document.getElementById('result-text');
+        const confidenceScore = document.getElementById('confidence-score');
+
+        document.getElementById('browse-btn').addEventListener('click', () => fileInput.click());
+
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            location.reload(); // Reload the page to reset everything
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleUpload(file);
+            }
+        });
+
+        async function handleUpload(file) {
+            console.log("Uploading file:", file.name);
+
+            errorMessage.classList.add("hidden");
+            uploadProgress.classList.remove("hidden");
+            resultContainer.classList.add("hidden");
+            progressPercentage.textContent = "0%";
+            progressBar.style.width = "0%";
+
+            if (!file.type.startsWith("video/")) {
+                errorMessage.textContent = 'Error: Please upload a valid video file.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            if (file.size > 500 * 1024 * 1024) {
+                errorMessage.textContent = 'Error: File is too large (max 500MB).';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("video", file);
+
+            try {
+                console.log("Sending video to server...");
+                const response = await fetch("/upload_video", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error("Server error. Please try again.");
+                }
+
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 10;
+                    progressPercentage.textContent = `${progress}%`;
+                    progressBar.style.width =` ${progress}%`;
+                    if (progress >= 100) clearInterval(progressInterval);
+                }, 500);
+
+                const data = await response.json();
+                clearInterval(progressInterval);
+                progressPercentage.textContent = "100%";
+                progressBar.style.width = "100%";
+
+                if (data.file_url) {
+                    const videoURL = data.file_url.startsWith("/") ? data.file_url : `/${data.file_url}`;
+                    videoPreview.src = videoURL;  // Update the video src with correct URL
+                    videoPreview.load();
+                    videoPreview.play();  // Play the video
+                    videoPreview.classList.remove("hidden");
+                    videoPreviewContainer.classList.remove('hidden');
+                }
+
+                resultText.textContent = data.result === "Fake" ? "❌ Deepfake Detected" : "✅ Real Video";
+                confidenceScore.textContent = `AI Confidence: ${data.confidence}`;
+
+                resultContainer.classList.remove("hidden");
+                refreshBtn.classList.remove("hidden");
+            } catch (error) {
+                console.error("Error during upload:", error);
+                errorMessage.textContent = "⚠ Error: " + error.message;
+                errorMessage.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
