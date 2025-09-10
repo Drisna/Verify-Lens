@@ -1,3 +1,9 @@
+# Core build tools (must come first)
+pip==25.1.1
+setuptools==70.0.0
+wheel==0.43.0
+
+# Your project dependencies
 Flask==3.1.0
 tensorflow==2.20.0
 keras==3.11.0
