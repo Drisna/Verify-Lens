@@ -1,9 +1,9 @@
 Flask==3.1.0
 tensorflow==2.20.0
-keras==3.11.0
 numpy==1.25.0
 opencv-python-headless==4.11.0.86
 h5py==3.13.0
 gdown==5.2.0
 tensorflow-addons==0.21.0
 gunicorn==23.0.0
+
